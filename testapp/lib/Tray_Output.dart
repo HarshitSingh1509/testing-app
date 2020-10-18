@@ -10,6 +10,7 @@ class ChartApp extends StatelessWidget {
       @required this.gl,
       @required this.y1,
       @required this.m,
+      @required this.e,
       @required this.c});
   final double y2;
   final double xo;
@@ -17,6 +18,7 @@ class ChartApp extends StatelessWidget {
   final double gl;
   final double y1;
   final double m;
+  final double e;
   final int c;
 
   @override
@@ -24,7 +26,8 @@ class ChartApp extends StatelessWidget {
     return MaterialApp(
       title: 'Chart Demo',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: _MyHomePage(y2: y2, xo: xo, gs: gs, gl: gl, y1: y1, m: m, c: c),
+      home:
+          _MyHomePage(y2: y2, xo: xo, gs: gs, gl: gl, y1: y1, m: m, e: e, c: c),
     );
   }
 }
@@ -39,6 +42,7 @@ class _MyHomePage extends StatefulWidget {
       @required this.gl,
       @required this.y1,
       @required this.m,
+      @required this.e,
       @required this.c})
       : super(key: key);
   final double y2;
@@ -47,6 +51,7 @@ class _MyHomePage extends StatefulWidget {
   final double gl;
   final double y1;
   final double m;
+  final double e;
   final int c;
 
   @override
@@ -59,28 +64,29 @@ class _MyHomePageState extends State<_MyHomePage> {
   List<_ChartData3> chartData3 = [];
   @override
   Widget build(BuildContext context) {
-    var y2w = widget.y2;
-    var xow = widget.xo;
-    var gsw = widget.gs;
-    var glw = widget.gl;
-    var y1w = widget.y1;
-    var cw = widget.c;
-    var mw = widget.m;
-    var cy2;
-    var cy1;
+    double ew = widget.e;
+    double y2w = widget.y2;
+    double xow = widget.xo;
+    double gsw = widget.gs;
+    double glw = widget.gl;
+    double y1w = widget.y1;
+    int cw = widget.c;
+    double mw = widget.m;
+    double cy2;
+    double cy1;
     cy2 = y2w / (100 - y2w);
     if (cw == 1) {
       cy1 = cy2 * (y1w / 100);
     } else {
-      cy1 = cy2 * (y2w - y1w) / 100;
+      cy1 = cy2 * (1 - (y1w / 100));
     }
 
-    var cgs = gsw * (1 - (y2w / 100));
-    var cgl = glw * (1 - (xow / 100));
-    var cxo = xow / (100 - xow);
-    var cxn = ((cgs * (cy2 - cy1)) / cgl) + cxo;
-    var cxd = cxn;
-    var cyd = cy2;
+    double cgs = gsw * (1 - (y2w / 100));
+    double cgl = glw * (1 - (xow / 100));
+    double cxo = xow / (100 - xow);
+    double cxn = ((cgs * (cy2 - cy1)) / cgl) + cxo;
+    double cxd = cxn;
+    double cyd = cy2;
     chartData3.add(_ChartData3(cxd, cyd));
     double j = 0;
     double f1(double x) {
@@ -102,13 +108,13 @@ class _MyHomePageState extends State<_MyHomePage> {
       j = j + 0.5;
       if (cxd <= cxo || cyd <= cy1) break;
     }
-    var p = ((((j).ceil()) / 0.4).ceil());
+    var p = ((((j).ceil()) / ew).ceil());
     for (double k = 0; k <= cxn;) {
-      k = k + 0.01;
+      k = k + 0.0001;
       chartData1.add(_ChartData1(k, mw * k));
     }
     for (double l = 0; l <= cxn;) {
-      l = l + 0.01;
+      l = l + 0.0001;
       chartData2.add(_ChartData2(l, (cgl * (l - cxo)) / cgs + cy1));
     }
     return Scaffold(

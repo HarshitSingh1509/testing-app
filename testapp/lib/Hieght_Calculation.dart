@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:testapp/Hieght_Calculation.dart';
 import 'package:testapp/Tray_Number.dart';
 
-class MyAppBar extends StatelessWidget {
-  static const String _title = 'Calculation for Absorbers';
+class AppBarTower extends StatelessWidget {
+  static const String _title = 'Calculation for hieght of tower';
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +12,7 @@ class MyAppBar extends StatelessWidget {
         appBar: AppBar(
           title: const Text(_title),
         ),
-        body: MyScaffold(),
+        body: MyStatefulWidget(),
         drawer: Drawer(
           // Add a ListView to the drawer. This ensures the user can scroll
           // through the options in the drawer if there isn't enough vertical
@@ -31,7 +30,6 @@ class MyAppBar extends StatelessWidget {
               ListTile(
                 title: Text('Calculation for number of trays'),
                 onTap: () {
-                  Navigator.pop(context);
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => AppBarTrays()),
@@ -44,7 +42,6 @@ class MyAppBar extends StatelessWidget {
               ListTile(
                 title: Text('Calculation of hieght of tower'),
                 onTap: () {
-                  Navigator.pop(context);
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => AppBarTower()),
@@ -66,64 +63,62 @@ class MyAppBar extends StatelessWidget {
 
 }
 
-class MyScaffold extends StatelessWidget {
+class MyStatefulWidget extends StatefulWidget {
+  MyStatefulWidget({Key key}) : super(key: key);
+
+  @override
+  _MyStatefulWidgetState createState() => _MyStatefulWidgetState();
+}
+
+/// This is the private State class that goes with MyStatefulWidget.
+class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return Form(
+      key: _formKey,
       child: Column(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          new SizedBox(
-            width: 200.0,
-            height: 100.0,
-            child: new RaisedButton(
+          TextFormField(
+            decoration: const InputDecoration(
+              hintText: 'Variable 1',
+            ),
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Please enter some text';
+              }
+              return null;
+            },
+          ),
+          TextFormField(
+            decoration: const InputDecoration(
+              hintText: 'Variable 2',
+            ),
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Please enter some text';
+              }
+              return null;
+            },
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: RaisedButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => AppBarTrays()),
-                );
+                // Validate will return true if the form is valid, or false if
+                // the form is invalid.
+                if (_formKey.currentState.validate()) {
+                  // Process data.
+                }
               },
-              color: Colors.blue,
-              elevation: 5,
-              child: const Text('Number of Trays',
-                  style: TextStyle(
-                    fontSize: 20,
-                  )),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(20))),
+              child: Text('Submit'),
             ),
           ),
-          const SizedBox(height: 30),
-          new SizedBox(
-            width: 200.0,
-            height: 100.0,
-            child: new RaisedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => AppBarTower()),
-                );
-              },
-              color: Colors.blue,
-              elevation: 5,
-              child: const Text('Hieght Calculation',
-                  style: TextStyle(
-                    fontSize: 20,
-                  )),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(20))),
-            ),
-          ),
-          const SizedBox(height: 30),
         ],
       ),
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    title: 'My app', // used by the OS task switcher
-    home: MyAppBar(),
-  ));
 }
