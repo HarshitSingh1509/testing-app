@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:testapp/Tray_Number.dart';
+import 'package:testapp/GraphPrint.dart';
 
 class AppBarTower extends StatelessWidget {
   static const String _title = 'Calculation for hieght of tower';
@@ -110,9 +111,13 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
               onPressed: () {
                 // Validate will return true if the form is valid, or false if
                 // the form is invalid.
-                if (_formKey.currentState.validate()) {
-                  // Process data.
-                }
+                //if (_formKey.currentState.validate()) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => GraphPrint()),
+                );
+                // Process data.
+                //  }
               },
               child: Text('Submit'),
             ),
