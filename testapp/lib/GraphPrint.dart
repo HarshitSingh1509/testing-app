@@ -1,26 +1,71 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:testapp/CurveArea.dart';
 
 class GraphPrint extends StatelessWidget {
   // ignore: prefer_const_constructors_in_immutables
-  GraphPrint();
+  GraphPrint(
+      {@required this.g1,
+      @required this.y1,
+      @required this.p,
+      @required this.ls,
+      @required this.x2,
+      @required this.kxa,
+      @required this.kya,
+      @required this.cl,
+      @required this.n});
+  final double g1;
+  final double y1;
+  final double p;
+  final double ls;
+  final double x2;
+  final double kxa;
+  final double kya;
+  final List<List> cl;
+  final int n;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Chart Demo',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: _MyHomePage(),
+      home: _MyHomePage(
+          g1: g1,
+          y1: y1,
+          p: p,
+          ls: ls,
+          x2: x2,
+          kxa: kxa,
+          kya: kya,
+          cl: cl,
+          n: n),
     );
   }
 }
 
 class _MyHomePage extends StatefulWidget {
   // ignore: prefer_const_constructors_in_immutables
-  _MyHomePage({
-    Key key,
-  }) : super(key: key);
-
+  _MyHomePage(
+      {Key key,
+      @required this.g1,
+      @required this.y1,
+      @required this.p,
+      @required this.ls,
+      @required this.x2,
+      @required this.kxa,
+      @required this.kya,
+      @required this.cl,
+      @required this.n})
+      : super(key: key);
+  final double g1;
+  final double y1;
+  final double p;
+  final double ls;
+  final double x2;
+  final double kxa;
+  final double kya;
+  final List<List> cl;
+  final int n;
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -30,11 +75,20 @@ class _MyHomePageState extends State<_MyHomePage> {
   List<_SalesData> chartData1 = [];
   @override
   Widget build(BuildContext context) {
+    double eg1 = widget.g1;
+    double y2 = widget.y1;
+    double ep = widget.p;
+    double els = widget.ls;
+    double x1 = widget.x2;
+    double ekxa = widget.kxa;
+    double ekya = widget.kya;
+    List<List> x = widget.cl;
+    int n1 = widget.n;
     int m = 10;
     int n = 2;
-    var x = List.generate(m, (i) => List(n), growable: false);
+    var s = List.generate(m, (i) => List(n1), growable: false);
 
-    x = [
+    s = [
       [0.00, 0.00],
       [0.000056, 0.00079],
       [0.00014, 0.00223],
@@ -46,33 +100,36 @@ class _MyHomePageState extends State<_MyHomePage> {
       [0.00297, 0.104],
       [0.004, 0.16],
     ];
-    int n1 = 10;
+
     for (int j = 0; j < n1; j++) {
       chartData.add(_SalesData(x[j][0], x[j][1]));
     }
-    double sumx = 0, sumy = 0, sumxy = 0, sumx2 = 0;
-    for (int k = 0; k < n1; k++) {
-      sumx = sumx + x[k][0];
-      sumy = sumy + x[k][1];
-      sumxy = sumxy + x[k][0] * x[k][1];
-      sumx2 = sumx2 + x[k][0] * x[k][0];
-    }
-    double slope = (n1 * sumxy - sumx * sumy) / (n1 * sumx2 - sumx * sumx);
-    double intercept = (sumy - slope * sumx) / n1;
-    for (double p = 0; p < x[n1 - 1][0];) {
-      chartData1.add(_SalesData(p, slope * p + intercept));
-      p = p + 0.000001;
-    }
+    double gs = eg1 * (1 - y2);
+    print(gs);
+    double cy1 = (eg1 * y2 - ep * eg1 * y2) / gs;
+    double y1 = cy1 / (1 + cy1);
+    double cy2 = y2 / (1 - y2);
+    double cx1 = x1 / (1 - x1);
+    double cx2 = (gs * (cy2 - cy1) / els) + cx1;
+    double x2 = cx2 / (1 + cx2);
+    print(y1);
+    print(x2);
+    print(y2);
+
     int k = 0;
     var q = List.generate(50, (w) => List(4), growable: false);
-    double y2 = 0.15, y1 = 0.0088, x2 = 0.00249, x1 = 0;
+
     double mop = (y2 - y1) / (x2 - x1);
-    for (double i = 0.000005; i < x2;) {
+    for (double j = x1; j < x2;) {
+      chartData1.add(_SalesData(j, (mop * j + y1)));
+      j = j + 0.000001;
+    }
+    for (double i = 0.000005; i <= x2;) {
       double xa = i;
       double ya = mop * xa + y1;
-      double mtie = -15.71;
+      double mtie = -1 * (ekxa / ekya);
       double y = ya - mtie * xa;
-      for (int j = 0; j < 9; j++) {
+      for (int j = 0; j < n1 - 1; j++) {
         double ax1 = xa, ay1 = ya, ax2 = 0, ay2 = y;
         double bx1 = x[j][0],
             by1 = x[j][1],
@@ -99,7 +156,7 @@ class _MyHomePageState extends State<_MyHomePage> {
           }
         }
       }
-      double c = x2 / 50;
+      double c = x2 / 49;
       i = i + c;
       k = k + 1;
       //print(q);
@@ -116,7 +173,9 @@ class _MyHomePageState extends State<_MyHomePage> {
     for (int o = 0; o < k - 1; o++) {
       sumArea = sumArea + (r[o + 1][1] + r[o][1]) * (r[o + 1][0] - r[o][0]) / 2;
     }
-
+    double gld = gs / (1 - y1);
+    double g = (eg1 + gld) / 2;
+    double z = (g * sumArea) / (ekya * 3600);
     return Scaffold(
         appBar: AppBar(
           title: Text('Result'),
@@ -157,6 +216,18 @@ class _MyHomePageState extends State<_MyHomePage> {
                   style: TextStyle(fontSize: 30),
                 )),
             // )
+            FlatButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          CurveArea(area: sumArea, q: r, z: z, n: n1)),
+                );
+              },
+              child: Text('Submit'),
+              color: Colors.green,
+            ),
           ],
         ));
   }

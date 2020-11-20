@@ -42,7 +42,7 @@ class MyAppBar extends StatelessWidget {
                 },
               ),
               ListTile(
-                title: Text('Calculation of hieght of tower'),
+                title: Text('Calculation of height of tower'),
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.push(
@@ -106,7 +106,7 @@ class MyScaffold extends StatelessWidget {
               },
               color: Colors.blue,
               elevation: 5,
-              child: const Text('Hieght Calculation',
+              child: const Text('Height Calculation',
                   style: TextStyle(
                     fontSize: 20,
                   )),
